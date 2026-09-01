@@ -1,153 +1,199 @@
-import React from "react";
-import { assets } from "./assets/ChatGPT_Clone_assets/assetes";
+import React, { useEffect, useState } from "react";
+import {
+  SearchIcon,
+  SidebarToggleIcon,
+  NewChatIcon,
+  ImagesIcon,
+  LibraryIcon,
+  ScheduledIcon,
+  PluginsIcon,
+  ProjectsIcon,
+  CodexIcon,
+  MoreIcon,
+  PlusIcon,
+  ThinkIcon,
+  MicIcon,
+  WaveformIcon,
+  GiftIcon,
+  RefreshIcon,
+} from "./components/Icons";
 import "./App.css";
 
-const historyItems = [
-  "Product strategy for a creator app",
-  "Website copy for a luxury skincare launch",
-  "Design system ideas for a SaaS dashboard",
-  "Marketing plan for a fintech startup",
+const navItems = [
+  { icon: ImagesIcon, label: "Images" },
+  { icon: LibraryIcon, label: "Library" },
+  { icon: ScheduledIcon, label: "Scheduled" },
+  { icon: PluginsIcon, label: "Plugins" },
+  { icon: ProjectsIcon, label: "Projects" },
+  { icon: CodexIcon, label: "Codex" },
+  { icon: MoreIcon, label: "More" },
 ];
 
-const quickPrompts = [
-  "Create a landing page structure",
-  "Draft brand voice guidelines",
-  "Summarize this research brief",
-];
-
-const conversation = [
-  {
-    role: "user",
-    name: "You",
-    avatar: assets.userIcon,
-    text:
-      "I want a premium ChatGPT-style interface with a modern 2026 aesthetic, dark glass panels, subtle gradients, and a more polished product feel.",
-  },
-  {
-    role: "assistant",
-    name: "GPT",
-    avatar: assets.chatgptlogo,
-    text:
-      "Absolutely — I created a front-end concept with a luxury dark theme, floating glass cards, soft neon accent lighting, thoughtful spacing, and a more refined conversation layout designed for a modern AI product experience.",
-  },
-  {
-    role: "user",
-    name: "You",
-    avatar: assets.userIcon,
-    text:
-      "This should feel streamlined, high-end, and easy to scan while still feeling like a functional chat app.",
-  },
-  {
-    role: "assistant",
-    name: "GPT",
-    avatar: assets.chatgptlogo,
-    text:
-      "The interface uses layered gradients, rounded panels, cleaner typography, and compact but clear messaging blocks so the experience feels premium without becoming overdecorated.",
-  },
+const recentChats = [
+  "Change Git Username Email",
+  "Samee Chatbot MERN Waxbarasho",
+  "Soo Jeedin Project Student Supervisor",
+  "iPhone Biyo Cilad Touch",
+  "Sharaxaad File Student Supervisor",
+  "Qoraal Kooban Horumar Riyo",
+  "Nadiifinta RAMka Hal Mar",
 ];
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setSidebarOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sidebarOpen]);
+
+  const closeSidebar = () => setSidebarOpen(false);
+  const toggleSidebar = () => setSidebarOpen((open) => !open);
+
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
+    <div className={`app-shell ${sidebarOpen ? "sidebar-open" : ""}`}>
+      <button
+        type="button"
+        className="sidebar-overlay"
+        aria-label="Close sidebar"
+        onClick={closeSidebar}
+      />
+
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
-          <div className="brand-mark">
-            <img src={assets.chatgpt} alt="ChatGPT logo" className="brand-logo" />
-            <span>ChatGPT</span>
+          <span className="sidebar-brand">ChatGPT</span>
+          <div className="sidebar-header-actions">
+            <button className="icon-btn" aria-label="Search">
+              <SearchIcon />
+            </button>
+            <button
+              className="icon-btn sidebar-close-btn"
+              aria-label="Close sidebar"
+              onClick={closeSidebar}
+            >
+              <SidebarToggleIcon />
+            </button>
           </div>
-          <button className="new-chat-button">
-            <img src={assets.add30} alt="Add chat" className="icon-14" />
-            New chat
-          </button>
         </div>
 
-        <div className="sidebar-section">
-          <div className="section-label">Recent</div>
-          <div className="chat-list">
-            {historyItems.map((item, index) => (
-              <button key={item} className={`chat-item ${index === 0 ? "active" : ""}`}>
-                <img src={assets.message} alt="Chat" className="icon-14" />
-                <span>{item}</span>
+        <div className="sidebar-scroll">
+          <button className="new-chat-btn active" onClick={closeSidebar}>
+            <NewChatIcon />
+            New chat
+          </button>
+
+          <nav className="nav-list">
+            {navItems.map(({ icon: Icon, label }) => (
+              <button key={label} className="nav-item" onClick={closeSidebar}>
+                <Icon />
+                <span>{label}</span>
+              </button>
+            ))}
+          </nav>
+
+          <div className="recents-section">
+            <div className="recents-label">Recents</div>
+            {recentChats.map((chat) => (
+              <button key={chat} className="recent-item" onClick={closeSidebar}>
+                {chat}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="sidebar-footer">
-          <button className="utility-item">
-            <img src={assets.addhome} alt="Home" className="icon-14" />
-            <span>Home</span>
+        <div className="sidebar-bottom">
+          <button className="user-profile">
+            <div className="user-avatar">MO</div>
+            <div className="user-info">
+              <span className="user-name">mahadaay online</span>
+              <span className="user-plan">Free</span>
+            </div>
           </button>
-          <button className="utility-item">
-            <img src={assets.bookmark} alt="Saved" className="icon-14" />
-            <span>Saved</span>
-          </button>
-          <button className="utility-item highlighted">
-            <img src={assets.rocket} alt="Upgrade" className="icon-14" />
-            <span>Upgrade to Pro</span>
+          <button className="claim-offer-btn">
+            <GiftIcon />
+            Claim offer
           </button>
         </div>
       </aside>
 
-      <main className="chat-panel">
-        <header className="topbar">
-          <div className="topbar-left">
-            <div className="status-pill">
-              <span className="status-dot" />
-              Online
-            </div>
-            <div className="model-pill">GPT-4.1</div>
+      <main className="main-panel">
+        <header className="main-header">
+          <div className="header-left">
+            <button
+              className="icon-btn mobile-menu-btn"
+              aria-label="Open sidebar"
+              onClick={toggleSidebar}
+            >
+              <SidebarToggleIcon />
+            </button>
           </div>
 
-          <div className="topbar-actions">
-            <button className="toolbar-button">Share</button>
-            <button className="toolbar-button">Export</button>
-            <button className="toolbar-button ghost">Details</button>
+          <div className="mode-toggle">
+            <button className="mode-btn active">Chat</button>
+            <button className="mode-btn">+ Work</button>
+          </div>
+
+          <div className="header-actions">
+            <button className="free-offer-link">
+              <GiftIcon />
+              <span>Free offer</span>
+            </button>
+            <button className="icon-btn" aria-label="Refresh">
+              <RefreshIcon />
+            </button>
           </div>
         </header>
 
-        <div className="chat-surface">
-          <div className="message-stack">
-            {conversation.map((message) => (
-              <div key={`${message.role}-${message.text}`} className={`message-row ${message.role}`}>
-                <img src={message.avatar} alt={`${message.name} avatar`} className="message-avatar" />
-                <div className="message-card">
-                  <div className="message-meta">{message.name}</div>
-                  <p>{message.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <div className="welcome-area">
+          <h1 className="greeting">Hey, Eng.Mahadaay. Ready to dive in?</h1>
 
-        <div className="composer-wrap">
-          <div className="prompt-row">
-            {quickPrompts.map((prompt) => (
-              <button key={prompt} className="prompt-chip">
-                {prompt}
-              </button>
-            ))}
-          </div>
-
-          <div className="composer-box">
-            <button className="composer-action" aria-label="Attach file">
-              <img src={assets.add30} alt="Attach" className="icon-14" />
+          <div className="input-bar">
+            <button className="input-plus-btn" aria-label="Add">
+              <PlusIcon />
             </button>
-
-            <textarea
-              rows="1"
-              defaultValue="Design a premium AI assistant dashboard for a growing SaaS brand."
+            <input
+              type="text"
+              className="input-field"
+              placeholder="Ask anything"
               aria-label="Message input"
             />
-
-            <button className="send-button" aria-label="Send message">
-              <img src={assets.send} alt="Send" className="icon-18" />
-            </button>
+            <div className="input-actions">
+              <button className="think-btn">
+                <ThinkIcon />
+                <span>Think</span>
+              </button>
+              <button className="icon-btn mic-btn" aria-label="Voice input">
+                <MicIcon />
+              </button>
+              <button className="voice-mode-btn" aria-label="Voice mode">
+                <WaveformIcon />
+              </button>
+            </div>
           </div>
-
-          <p className="disclaimer">
-            ChatGPT may produce inaccurate information about people, places, or facts. Use this as a creative front-end concept.
-          </p>
         </div>
       </main>
     </div>
