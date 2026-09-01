@@ -7,6 +7,8 @@ This project focuses on recreating the look and user experience of a modern AI c
 > **Note:** This project is currently a **frontend UI project**. It does not include a real AI backend or OpenAI API integration.
 
 ---
+## 👇 Public Url
+https://chatgpt-clone-amber-beta.vercel.app/
 
 ## ✨ Features
 
